@@ -5,6 +5,7 @@ package com.mseeworld.gamer.ai;
 
 import com.mseeworld.gamer.config.GamerEnum;
 import com.mseeworld.gamer.imgprocess.TaskProcess;
+import org.opencv.core.Rect;
 
 /**
  *
@@ -15,11 +16,11 @@ public class ProcessImage {
     public int processTaskImage(String imageDir) {
 
         String cfgfile = "src/main/resources/taskui.json";
-        String cfgfile2 = "src/main/resources/taskui2.json";
+        String srcImg = "src/main/image/task/yj5.png";
         TaskProcess tp = new TaskProcess();
-        tp.preProcess();
-//        tp.initConfigFile(cfgfile);
-//        tp.saveConfigFile(cfgfile2);
+        tp.initConfigFile(cfgfile);
+        tp.setSrcImg(srcImg);
+        tp.getTargetRegin();
 
         return GamerEnum.SUCCESS;
     }

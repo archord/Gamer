@@ -98,7 +98,7 @@ public class CommonFunction {
         return maxthread;
     }
 
-    public static String readFile(String path) {
+    public static String readFileAsString(String path) {
         BufferedReader reader = null;
         StringBuilder sb = new StringBuilder();
         try {
@@ -124,7 +124,7 @@ public class CommonFunction {
         return sb.toString();
     }
 
-    public static void writeFile(String path, String content) {
+    public static void writeStringToFile(String path, String content) {
         BufferedWriter writer = null;
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(path);

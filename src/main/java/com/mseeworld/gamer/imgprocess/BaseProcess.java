@@ -16,6 +16,8 @@ public class BaseProcess implements ImageProcess{
 
     private GameUI gameUI;
     protected String srcImg;
+    protected String bgImg;
+    protected String labelImg;
     protected Mat srcMat;
     protected Mat bgMat;
     protected Mat labelMat;

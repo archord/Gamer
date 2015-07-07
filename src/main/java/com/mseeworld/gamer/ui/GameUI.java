@@ -18,7 +18,7 @@ public class GameUI {
     protected String templatePath;
     protected String labelImage;
     protected String bgImage;
-    private Rect labelRegin;
+    protected Rect bgLabelRegin;
     protected Rect winRegin;
     protected List<FunctionRegin> subRegins;
 
@@ -198,16 +198,16 @@ public class GameUI {
     }
 
     /**
-     * @return the labelRegin
+     * @return the bgLabelRegin
      */
-    public Rect getLabelRegin() {
-        return labelRegin;
+    public Rect getBgLabelRegin() {
+        return bgLabelRegin;
     }
 
     /**
-     * @param labelRegin the labelRegin to set
+     * @param bgLabelRegin the bgLabelRegin to set
      */
-    public void setLabelRegin(Rect labelRegin) {
-        this.labelRegin = labelRegin;
+    public void setBgLabelRegin(Rect bgLabelRegin) {
+        this.bgLabelRegin = bgLabelRegin;
     }
 }

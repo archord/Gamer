@@ -16,6 +16,7 @@ import com.mseeworld.gamer.ui.GameUI;
 import com.mseeworld.gamer.ui.TaskUI;
 import com.mseeworld.gamer.util.CommonFunction;
 import com.mseeworld.gamer.util.Constant;
+import com.mseeworld.gamer.util.ImageFunction;
 import java.io.IOException;
 import static java.lang.System.exit;
 import java.util.ArrayList;
@@ -68,11 +69,13 @@ public class TaskProcess extends BaseProcess {
     @Override
     public int initConfigFile(String cfgName) {
         try {
-            String taskui = CommonFunction.readFile(cfgName);
+            String taskui = CommonFunction.readFileAsString(cfgName);
             if (!taskui.isEmpty()) {
                 ObjectMapper mapper = new ObjectMapper();
                 ObjectReader reader = mapper.reader(TaskUI.class);
                 uicfg = reader.readValue(taskui);
+                bgImg = uicfg.getTemplatePath()+"/" + uicfg.getBgImage();
+                labelImg = uicfg.getTemplatePath()+"/" + uicfg.getLabelImage();
             } else {
                 log.error("config file is empty.");
                 return GamerEnum.CONFIG_FILE_EMPTY;
@@ -86,9 +89,23 @@ public class TaskProcess extends BaseProcess {
     @Override
     public int getTargetRegin() {
         srcMat = imread(srcImg, CV_LOAD_IMAGE_GRAYSCALE);
-        bgMat = imread(uicfg.getBgImage(), CV_LOAD_IMAGE_GRAYSCALE);
-        labelMat = imread(uicfg.getLabelImage(), CV_LOAD_IMAGE_GRAYSCALE);
+        bgMat = imread(bgImg, CV_LOAD_IMAGE_GRAYSCALE);
+        labelMat = imread(labelImg, CV_LOAD_IMAGE_GRAYSCALE);
 
+        Rect bgLabelRegin=ImageFunction.getSubRegin2(bgMat, labelMat);
+        Rect srcLabelRegin=ImageFunction.getSubRegin2(srcMat, labelMat);
+        System.out.println(bgLabelRegin.toString());
+        System.out.println(srcLabelRegin.toString());
+        
+        Rect bgRegin = new Rect();
+        bgRegin.x = (int) (srcLabelRegin.x - bgLabelRegin.x);
+        bgRegin.y = (int) (srcLabelRegin.y - bgLabelRegin.y);
+        bgRegin.width = bgMat.cols();
+        bgRegin.height = bgMat.rows();
+        System.out.println(bgRegin.toString());
+        Core.rectangle(srcMat, new Point(bgRegin.x, bgRegin.y), new Point(bgRegin.x + bgRegin.width, bgRegin.y + bgRegin.height), new Scalar(255));
+        new ImageShow(srcMat, "srcImg").run();
+        
         return GamerEnum.SUCCESS;
     }
 
@@ -421,7 +438,7 @@ public class TaskProcess extends BaseProcess {
                 ObjectMapper mapper = new ObjectMapper();
                 ObjectWriter writer = mapper.writerWithView(GameUI.class);
                 String json = writer.writeValueAsString(uicfg);
-                CommonFunction.writeFile(cfgName, json);
+                CommonFunction.writeStringToFile(cfgName, json);
             }else{
                 log.error("save json error.");
                 return GamerEnum.CONFIG_FILE_EMPTY;
